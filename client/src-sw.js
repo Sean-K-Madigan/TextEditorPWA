@@ -26,5 +26,21 @@ warmStrategyCache({
 
 registerRoute(({ request }) => request.mode === 'navigate', pageCache);
 
+// assetCache strategy
+const assetCache = new CacheFirst({
+  cacheName: 'asset-cache',
+  plugins: [
+    new CacheableResponsePlugin({
+      statuses: [0, 200],
+    }),
+    new ExpirationPlugin({
+      maxAgeSeconds: 30 * 24 * 60 * 60,
+    }),
+  ],
+});
+
 // TODO: Implement asset caching
-registerRoute();
+registerRoute(
+  ({ request }) => ['style', 'script', 'worker'].includes(request.destination),
+  assetCache // Could I have resued pageCache here? Why or why not?
+);
