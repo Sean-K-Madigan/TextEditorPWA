@@ -26,18 +26,16 @@ warmStrategyCache({
 
 registerRoute(({ request }) => request.mode === 'navigate', pageCache);
 
-// assetCache strategy
-const assetCache = new StaleWhileRevalidate({
-  cacheName: 'asset-cache',
-  plugins: [
-    new CacheableResponsePlugin({
-      statuses: [0, 200],
-    }),
-  ],
-});
-
 // TODO: Implement asset caching
 registerRoute(
   ({ request }) => ['style', 'script', 'worker'].includes(request.destination),
-  assetCache // Could I have resued pageCache here? Why or why not?
+  new StaleWhileRevalidate({
+    cacheName: 'asset-cache',
+    plugins: [
+      new CacheableResponsePlugin({
+        statuses: [0, 200],
+      }),
+    ],
+  }),
+   // Could I have resued pageCache here? Why or why not?
 );
