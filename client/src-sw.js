@@ -37,5 +37,4 @@ registerRoute(
       }),
     ],
   }),
-   // Could I have resued pageCache here? Why or why not?
 );
